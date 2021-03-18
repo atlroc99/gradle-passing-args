@@ -1,7 +1,6 @@
 plugins {
     id 'groovy'
     id 'java'
-    id 'application'
 }
 
 // apply plugin: "java" -> older / legacy way of doing it. use plugins {...} closure : https://stackoverflow.com/questions/32352816/what-the-difference-in-applying-gradle-plugin
@@ -26,17 +25,20 @@ test {
 
 // ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
 
-ext {
-    javaMainClass = 'com.pass.args.MainClass'
-}
-application {
-    mainClassName = javaMainClass
+ext.javaMainClass = 'com.pass.args.MainClass'
+if (project.hasProperty('args')) {
+    ext.cmdargs = project.getProperty('args')
+} else {
+    ext.cmdargs = ""
 }
 
-// from the command line run:
-// gradle run --args="var1 var2 var3 var4 var5"
-//Here, we don’t use properties to pass arguments.
-// Instead, we pass the –args flag and the corresponding inputs there.
+task runTaskWithJavaExec(type: JavaExec) {
+    group('execution')
+    description('Running task with javaExec and pass args from teh commadn line')
+    classpath = sourceSets.main.runtimeClasspath
+    main = javaMainClass
+    args(cmdargs)
+}
 
 
 
