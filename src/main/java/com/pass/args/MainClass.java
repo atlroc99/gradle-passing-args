@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class MainClass {
     public static void main(String[] args) {
-//        System.out.println("Executing from the main class, args.length: " + args.length);
+        System.out.println("Executing from the main class, args.length: " + args.length);
 
         if (args.length == 0) {
             System.exit(0);

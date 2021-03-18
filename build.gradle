@@ -26,8 +26,13 @@ test {
 // ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
 
 ext.javaMainClass = 'com.pass.args.MainClass'
-if (project.hasProperty('args')) {
-    ext.cmdargs = project.getProperty('args')
+if (project.hasProperty('source') && project.hasProperty('destination')) {
+    def properties = project.getProperties();
+    println('source path: ' + properties.get('source'))
+    println('destination path: ' + properties.get('destination'))
+
+    ext.cmdargs = project.getProperty('source')
+    ext.cmdargs = project.getProperty("destination")
 } else {
     ext.cmdargs = ""
 }
@@ -39,6 +44,10 @@ task runTaskWithJavaExec(type: JavaExec) {
     main = javaMainClass
     args(cmdargs)
 }
+
+
+//setting system properties with the -D flag
+//setting project properties with the -P flag
 
 
 
