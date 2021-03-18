@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'java'
+    id 'application'
 }
 
 // apply plugin: "java" -> older / legacy way of doing it. use plugins {...} closure : https://stackoverflow.com/questions/32352816/what-the-difference-in-applying-gradle-plugin
@@ -24,19 +25,17 @@ test {
 }
 
 // ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
-// javaExec : https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/JavaExec.html
-// javaExec : https://docs.gradle.org/current/dsl/org.gradle.api.tasks.JavaExec.html
 
 ext {
     javaMainClass = 'com.pass.args.MainClass'
 }
-
-task runWithJavaExec(type: JavaExec) {
-    group('Execution')
-    description = 'Run the main class with JavaExecTask'
-    classpath = sourceSets.main.runtimeClasspath
-    main = javaMainClass
+application {
+    mainClassName = javaMainClass
 }
+
+// from the commadn line run:
+// gradle run --args="var1 var2 var3 var4 var5"
+
 
 
 
