@@ -1,7 +1,6 @@
 plugins {
     id 'groovy'
     id 'java'
-    id 'application'
 }
 
 // apply plugin: "java" -> older / legacy way of doing it. use plugins {...} closure : https://stackoverflow.com/questions/32352816/what-the-difference-in-applying-gradle-plugin
@@ -24,18 +23,21 @@ test {
     useJUnitPlatform()
 }
 
-// calling the main method from gradle
-// we use the application plugin -> it has ready-to-use tasks that helps us package and distribute our application.
-// application plugin has task called run which executes the main() method
+// ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
+// javaExec : https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/JavaExec.html
+// javaExec : https://docs.gradle.org/current/dsl/org.gradle.api.tasks.JavaExec.html
 
-//ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
 ext {
     javaMainClass = 'com.pass.args.MainClass'
 }
 
-application {
-    mainClassName = javaMainClass
+task runWithJavaExec(type: JavaExec) {
+    group('Execution')
+    description = 'Run the main class with JavaExecTask'
+    classpath = sourceSets.main.runtimeClasspath
+    main = javaMainClass
 }
+
 
 
 
