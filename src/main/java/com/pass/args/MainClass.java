@@ -4,19 +4,20 @@ import java.util.Arrays;
 
 public class MainClass {
     public static void main(String[] args) {
-        System.out.println("Executing from the main class, args.length: " + args.length);
+        System.out.println("\nExecuting from the main class, args.length: " + args.length);
+        System.out.println("\nprint from stream");
 
-        if (args.length == 0) {
+        Arrays.stream(args).forEach(System.out::println);
+
+        if (args.length != 2) {
             System.exit(0);
         }
 
-        if (args.length == 1) {
-            System.out.println(args[0]);
-            String[] s = args[0].split(" ");
-            Arrays.stream(s).forEach(System.out::println);
-            return;
-        }
+        System.out.println("-----------------------------------");
+        String sourcePath = args[0].trim();
+        String destinationPath = args[1].trim();
 
-        Arrays.stream(args).forEach(System.out::println);
+        System.out.println("sourcrePath: " + sourcePath);
+        System.out.println("destinatinoPath: " + destinationPath);
     }
 }

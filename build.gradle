@@ -26,23 +26,18 @@ test {
 // ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
 
 ext.javaMainClass = 'com.pass.args.MainClass'
-if (project.hasProperty('source') && project.hasProperty('destination')) {
-    def properties = project.getProperties();
-    println('source path: ' + properties.get('source'))
-    println('destination path: ' + properties.get('destination'))
-
-    ext.cmdargs = project.getProperty('source')
-    ext.cmdargs = project.getProperty("destination")
-} else {
-    ext.cmdargs = ""
-}
-
 task runTaskWithJavaExec(type: JavaExec) {
     group('execution')
     description('Running task with javaExec and pass args from teh commadn line')
+
     classpath = sourceSets.main.runtimeClasspath
     main = javaMainClass
-    args(cmdargs)
+
+    if (project.hasProperty('source') && project.hasProperty('destination')) {
+        args(project.getProperty('source'), project.getProperty('destination'))
+    } else {
+        args("")
+    }
 }
 
 
