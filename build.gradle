@@ -27,13 +27,14 @@ test {
 
 ext.javaMainClass = 'com.pass.args.MainClass'
 task runTaskWithJavaExec(type: JavaExec) {
-    group('execution')
+//    group('execution')
     description('Running task with javaExec and pass args from teh commadn line')
-
     classpath = sourceSets.main.runtimeClasspath
     main = javaMainClass
 
     if (project.hasProperty('source') && project.hasProperty('destination')) {
+        // soucePath = project.getProperty('source')
+        // destination = project.getProperty('destination')
         args(project.getProperty('source'), project.getProperty('destination'))
     } else {
         args("")
