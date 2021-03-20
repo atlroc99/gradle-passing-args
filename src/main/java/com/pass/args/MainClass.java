@@ -1,6 +1,8 @@
 package com.pass.args;
 
 import java.util.Arrays;
+import java.util.Properties;
+import java.util.stream.Stream;
 
 public class MainClass {
     public static void main(String[] args) {
@@ -9,15 +11,8 @@ public class MainClass {
 
         Arrays.stream(args).forEach(System.out::println);
 
-        if (args.length != 2) {
-            System.exit(0);
-        }
-
-        System.out.println("-----------------------------------");
-        String sourcePath = args[0].trim();
-        String destinationPath = args[1].trim();
-
-        System.out.println("sourcrePath: " + sourcePath);
-        System.out.println("destinatinoPath: " + destinationPath);
+        Properties properties = System.getProperties();
+//        Stream.of(properties).forEach(System.out::println);
+        System.out.println(System.getProperty("simple.message") + " : " + args[0] + " from simple");
     }
 }

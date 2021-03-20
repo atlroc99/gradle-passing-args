@@ -25,7 +25,21 @@ test {
 
 // ext:  https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
 
-ext.javaMainClass = 'com.pass.args.MainClass'
+//executing the main class
+task(runSimple, type: JavaExec) {
+    main = 'com.pass.args.MainClass'
+    classpath = sourceSets.main.runtimeClasspath
+    args 'MrKakhi'
+    systemProperty 'simple.message', 'Hello there, '
+}
+
+defaultTasks 'runSimple'
+
+task runLast(dependsOn: runSimple) {
+    doLast {println('this shuold run at last')}
+}
+
+/*ext.javaMainClass = 'com.pass.args.MainClass'
 task runTaskWithJavaExec(type: JavaExec) {
 //    group('execution')
     description('Running task with javaExec and pass args from teh commadn line')
@@ -39,11 +53,13 @@ task runTaskWithJavaExec(type: JavaExec) {
     } else {
         args("")
     }
-}
+}*/
 
 
 //setting system properties with the -D flag
 //setting project properties with the -P flag
+
+
 
 
 
