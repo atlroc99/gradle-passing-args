@@ -30,13 +30,19 @@ task(runSimple, type: JavaExec) {
     main = 'com.pass.args.MainClass'
     classpath = sourceSets.main.runtimeClasspath
     args 'MrKakhi'
+    println('project has property runLast: ' + project.hasProperty('runLast'))
     systemProperty 'simple.message', 'Hello there, '
+    if (project.hasProperty('runLast')) {
+        println 'project has property runLast'
+    }
 }
-
+// this will run by default if we don't specify and gradle task name
 defaultTasks 'runSimple'
 
-task runLast(dependsOn: runSimple) {
-    doLast {println('this shuold run at last')}
+
+// this task depends on the runSimple
+task runLast {
+    println('this shuold run at last')
 }
 
 /*ext.javaMainClass = 'com.pass.args.MainClass'
@@ -60,16 +66,80 @@ task runTaskWithJavaExec(type: JavaExec) {
 //setting project properties with the -P flag
 
 
+//usign tasks.register gradle V:6.8.3
+tasks.register('intro') {
+    doLast {
+        println 'printing  intro...'
+        String someStr = 'mY_nAmE'
+        println "some string: $someStr"
+        println "some string ${someStr.toUpperCase()}"
+    }
+}
+
+tasks.register('outro') {
+    dependsOn tasks.intro
+    doLast {
+        println 'this is OUTRO'
+    }
+}
 
 
+//dynamically registering task
+5.times { counter ->
+    tasks.register("task$counter") {
+        doLast {
+            println "i am task number $counter"
+        }
+    }
+}
+
+// Manipulating existing tasks:
+//------------------------------
+
+//tasks.task0.dependsOn(tasks.task2, tasks.task3)
+tasks.task0.dependsOn("task3", "task2")
+
+tasks.register('firstTask') {
+    doLast { Task task ->
+        println "inside the first task print name: $task.name"
+        println "message : ${message}"
+    }
+}
+
+// Accessing tasks as project Properties
+tasks.register('taskAsProjectProperty') {task ->
+    doLast {
+        println "\n\nthis task is accessed as project properties ${task.name}\n\n"
+    }
+}
+
+taskAsProjectProperty.description('this is a description of task task as project properties')
+
+boolean hasProp = project.hasProperty('taskAsProjectProperty')
+println("*** has property ${} ${hasProp} *** ")
+
+tasks.register('taskWithBoolean') {
+    if (hasProp) {
+        println "*** START ****"
+        println ">>> task has property: ${hasProp}"
+        Task tsk = project.properties.get('taskAsProjectProperty')
+        String taskDescription = tsk.getDescription();
+        if (taskDescription != null) {
+            println taskDescription
+        }
+        println "**** END ****"
+    }
+}
+
+//using ext -> Extra property
+//A Task Object already come with several properties and method. we can add some extra properties on top of that.
+// we use ext to add extra properties (variable / method)
+
+ext {
+    firstTask.message = "this message is a message"
+    Task f = project.getProperties().get('firstTask')
+    f.message = "this is a hello message added from ext"
+}
 
 
-
-
-
-
-
-
-
-
-
+//need to review Skipping task on chapter 2
